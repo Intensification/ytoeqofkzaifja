@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@r</title>
     
+    <!-- Site Icon / Favicon -->
     <link class="site-favicon" rel="icon" type="image/png" href="a2fd3e36-e87f-4a19-bae3-2e28aedf8cb1.png">
     
     <style>
@@ -290,4 +291,165 @@
                     <div class="badge-icon"></div>
                 </div>
             </div>
-            <p class="profile-subtext">Money speaks sense in a language all nations understand.</
+            <p class="profile-subtext">Money speaks sense in a language all nations understand.</p>
+        </div>
+
+        <div class="widget-wrapper">
+            <div class="dynamic-widget" id="platform-widget">
+                <div class="widget-left widget-anim-target" id="widget-content-left">
+                    <img src="" alt="Avatar" class="widget-avatar" id="widget-pfp">
+                    
+                    <div class="widget-info-block">
+                        <h3>
+                            <span id="widget-display-name"></span>
+                            <img src="" alt="Verified" class="widget-badge-img" id="widget-verified-icon">
+                        </h3>
+                        <span id="widget-handle" class="widget-username-sub"></span>
+                        
+                        <div class="widget-stats-row" id="widget-stats-container"></div>
+                    </div>
+                </div>
+
+                <div class="platform-label-tag widget-anim-target" id="widget-platform-tag"></div>
+                
+                <a href="" target="_blank" class="view-profile-action-btn widget-anim-target" id="widget-action-btn">View Profile ↗</a>
+            </div>
+
+            <div class="widget-dots-nav">
+                <div class="nav-dot active" onclick="manualPlatformSwitch(0)"></div>
+                <div class="nav-dot" onclick="manualPlatformSwitch(1)"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- FIXED TYPEWRITER LOOP CONFIG ---
+        const typingSequence = ["r", "re", "rel", "rela", "relap", "relaps", "relapse", "relaps", "relap", "rela", "rel", "re"];
+        let typingIndex = 0;
+
+        function handleTypecycleAnimations() {
+            const currentString = typingSequence[typingIndex];
+            document.title = "@" + currentString;
+            document.getElementById('main-display-name').innerText = currentString;
+            typingIndex = (typingIndex + 1) % typingSequence.length;
+        }
+        setInterval(handleTypecycleAnimations, 350);
+
+        // --- DYNAMIC ROTATION DATA CONFIG ---
+        const platformData = [
+            {
+                platform: "Roblox",
+                displayName: "yng",
+                handle: "@yng",
+                pfpUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-593CFEAFA18BFC82D8469ED2DFBEF75B-Png/150/150/AvatarHeadshot/Webp/noFilter",
+                verifiedIcon: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.wikia.nocookie.net%2Froblox%2Fimages%2Fe%2Fe4%2FRoblox_Verified_Badge.png%2Frevision%2Flatest%2Fscale-to-width-down%2F180%3Fcb%3D20220920020249&f=1&nofb=1&ipt=7d50722c9e2fa2c32f96fce2804d9b98e543c3e1faca27c67c96578ff2f2340d",
+                profileUrl: "https://www.roblox.com/users/1436002/profile",
+                statsHtml: `<span><strong>0</strong> Following</span><span class="stat-dot-separator">•</span><span><strong>30</strong> Friends</span><span class="stat-dot-separator">•</span><span><strong>125.3K</strong> Followers</span>`
+            },
+            {
+                platform: "TikTok",
+                displayName: "ok",
+                handle: "@dew",
+                pfpUrl: "https://p16-common-sign.tiktokcdn-eu.com/tos-alisg-avt-0068/2332fd97c25e3a23702159acfe146043~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=10399&refresh_token=91ff4380&x-expires=1782432000&x-signature=yLYYunHpTkwR0uhDM3GuaSiwPqU%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast2b",
+                verifiedIcon: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngmart.com%2Ffiles%2F12%2FTikTok-Verified-Badge-PNG-Photos.png&f=1&nofb=1&ipt=e25d124d927a162821fab1af9755f6e2448a149ed9f9a8f3e04017bffe98c5b6",
+                profileUrl: "https://www.tiktok.com/@dew",
+                statsHtml: `<span><strong>43</strong> Following</span><span class="stat-dot-separator">•</span><span><strong>1M</strong> Followers</span><span class="stat-dot-separator">•</span><span><strong>165.1K</strong> Likes</span>`
+            }
+        ];
+
+        let activePlatformIndex = 0;
+        let rotationInterval = null;
+        const targetElements = document.querySelectorAll('.widget-anim-target');
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function updateWidgetPlatform(index) {
+            targetElements.forEach(el => el.classList.add('swipe-hide'));
+
+            setTimeout(() => {
+                const currentData = platformData[index];
+                
+                document.getElementById('widget-pfp').src = currentData.pfpUrl;
+                document.getElementById('widget-display-name').innerText = currentData.displayName;
+                document.getElementById('widget-verified-icon').src = currentData.verifiedIcon;
+                
+                const handleEl = document.getElementById('widget-handle');
+                if(currentData.handle) {
+                    handleEl.innerText = currentData.handle;
+                    handleEl.style.display = "block";
+                } else {
+                    handleEl.style.display = "none";
+                }
+
+                document.getElementById('widget-stats-container').innerHTML = currentData.statsHtml;
+                document.getElementById('widget-platform-tag').innerText = currentData.platform;
+                document.getElementById('widget-action-btn').href = currentData.profileUrl;
+
+                dots.forEach((dot, dIdx) => {
+                    if(dIdx === index) dot.classList.add('active');
+                    else dot.classList.remove('active');
+                });
+
+                targetElements.forEach(el => el.classList.remove('swipe-hide'));
+                activePlatformIndex = index;
+            }, 250); 
+        }
+
+        function autoCycle() {
+            let nextIndex = (activePlatformIndex + 1) % platformData.length;
+            updateWidgetPlatform(nextIndex);
+        }
+
+        function startLoopTimer() {
+            clearInterval(rotationInterval);
+            rotationInterval = setInterval(autoCycle, 7000);
+        }
+
+        function manualPlatformSwitch(targetIndex) {
+            if (targetIndex === activePlatformIndex) return;
+            updateWidgetPlatform(targetIndex);
+            startLoopTimer(); 
+        }
+
+        updateWidgetPlatform(0);
+        startLoopTimer();
+
+        // --- LIVE VIEW COUNTER SYSTEM (+1 EVERY 1.5s & SAVED GLOBALLY) ---
+        const BASELINE_VIEWS = 1242; 
+        let globalViewsCount = BASELINE_VIEWS;
+
+        function handleViews() {
+            let storedViews = localStorage.getItem('profile_views_final');
+            if (!storedViews) {
+                globalViewsCount = BASELINE_VIEWS + 1;
+            } else {
+                globalViewsCount = parseInt(storedViews) + 1;
+            }
+            
+            // Save the first landing increment immediately
+            localStorage.setItem('profile_views_final', globalViewsCount);
+            document.getElementById('view-count').innerText = globalViewsCount;
+
+            // Continually add +1 every 1.5s and rewrite to storage so it stays permanently updated
+            setInterval(() => {
+                globalViewsCount++;
+                localStorage.setItem('profile_views_final', globalViewsCount);
+                document.getElementById('view-count').innerText = globalViewsCount;
+            }, 700);
+        }
+
+        // --- TILT ANIMATION ---
+        const card = document.getElementById('tilt-card');
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+
+        window.addEventListener('DOMContentLoaded', handleViews);
+    </script>
+</body>
+</html>
