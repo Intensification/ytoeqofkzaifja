@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@r</title>
     
-    <link rel="icon" type="image/png" href="a2fd3e36-e87f-4a19-bae3-2e28aedf8cb1.png">
+    <!-- Site Icon / Favicon -->
+    <link class="site-favicon" rel="icon" type="image/png" href="a2fd3e36-e87f-4a19-bae3-2e28aedf8cb1.png">
     
     <style>
         :root {
@@ -412,18 +413,28 @@
         updateWidgetPlatform(0);
         startLoopTimer();
 
-        // --- VIEW COUNTER SYSTEM ---
+        // --- LIVE VIEW COUNTER SYSTEM (+1 EVERY 1.5s & SAVED GLOBALLY) ---
         const BASELINE_VIEWS = 1242; 
+        let globalViewsCount = BASELINE_VIEWS;
 
         function handleViews() {
-            let currentViews = localStorage.getItem('profile_views_final');
-            if (!currentViews) {
-                currentViews = BASELINE_VIEWS + 1;
+            let storedViews = localStorage.getItem('profile_views_final');
+            if (!storedViews) {
+                globalViewsCount = BASELINE_VIEWS + 1;
             } else {
-                currentViews = parseInt(currentViews) + 1;
+                globalViewsCount = parseInt(storedViews) + 1;
             }
-            localStorage.setItem('profile_views_final', currentViews);
-            document.getElementById('view-count').innerText = currentViews;
+            
+            // Save the first landing increment immediately
+            localStorage.setItem('profile_views_final', globalViewsCount);
+            document.getElementById('view-count').innerText = globalViewsCount;
+
+            // Continually add +1 every 1.5s and rewrite to storage so it stays permanently updated
+            setInterval(() => {
+                globalViewsCount++;
+                localStorage.setItem('profile_views_final', globalViewsCount);
+                document.getElementById('view-count').innerText = globalViewsCount;
+            }, 1500);
         }
 
         // --- TILT ANIMATION ---
