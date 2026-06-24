@@ -10,11 +10,10 @@
     <style>
         :root {
             --text-main: #ffffff;
-            --text-sub: #d4d4d8; 
+            --text-sub: rgba(255, 255, 255, 0.5); 
             --bg-image: url('image_51ee3f.jpg'); 
-            
-            /* Your Nitro Badges Roll GIF */
             --custom-badge-url: url('https://cdn3.emoji.gg/emojis/3190-nitrobadgesroll.gif');
+            --accent-pink: #ffffff; 
         }
 
         * {
@@ -23,34 +22,180 @@
             padding: 0;
         }
 
+        html {
+            overflow: hidden;
+        }
+
         body {
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), var(--bg-image);
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), var(--bg-image);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* --- UPDATED: 60% TRANSPARENT TINT BLUR OVERLAY (Reveals background content underneath) --- */
+        #entry-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.08); /* Transparent layout white tint balance */
+            backdrop-filter: blur(14px) brightness(0.6); /* Softened blur and optimized brightness matrix for 60% clear pass-through */
+            -webkit-backdrop-filter: blur(14px) brightness(0.6);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            z-index: 9999;
+            cursor: pointer;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        
+        #entry-overlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* --- MONOSPACE WHITE CLICK WITH SHADOW --- */
+        #entry-text {
+            color: var(--text-main); 
+            font-family: "Courier New", Courier, Courier Prime, Monaco, monospace; 
+            font-size: 48px; 
+            font-weight: 800;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5); 
+            user-select: none;
+        }
+
+        /* --- CONTAINER WRAPPERS --- */
+        #scroll-wrapper {
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
+            position: relative;
+        }
+
+        .page-section {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .page-section.active-page {
+            pointer-events: auto;
+        }
+
+        #page-1 { transform: translateY(0vh); }
+        #page-2 { transform: translateY(100vh); }
+
+        /* --- BALANCED DIRECTIONAL SCROLL TRANSITIONS (2s) --- */
+        .scroll-animated {
+            opacity: 0;
+            transition: transform 2s cubic-bezier(0.15, 0.85, 0.25, 1), opacity 2s cubic-bezier(0.15, 0.85, 0.25, 1);
+        }
+
+        .scroll-animated.active {
+            opacity: 1;
+            transform: translateY(0) !important;
+        }
+
+        .fade-from-bottom {
+            transform: translateY(120px);
+        }
+
+        .fade-from-top {
+            transform: translateY(-120px);
+        }
+
+        /* --- FIRST PAGE SPECIFICS --- */
+        #first-page-view {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        #first-page-view img {
+            max-width: 90%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+
+        .scroll-hint-wrapper {
+            position: absolute;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+            animation: floatIndicator 3.0s ease-in-out infinite;
+        }
+
+        .scroll-hint {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .scroll-arrow {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: bold;
+        }
+
+        @keyframes floatIndicator {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(12px);
+                opacity: 0.9;
+            }
+        }
+
+        /* --- SECOND PAGE SPECIFICS --- */
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 640px;
+            align-items: center;
             perspective: 1000px;
         }
 
+        /* --- MAIN PROFILE CARD --- */
         .profile-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
             width: 100%;
-            max-width: 640px;
             padding: 40px;
             position: relative;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
             transform-style: preserve-3d;
-            will-change: transform;
             transition: transform 0.1s ease-out;
         }
 
@@ -67,12 +212,12 @@
             align-items: center;
             gap: 8px;
             font-weight: 500;
+            opacity: 0.8;
         }
 
         .view-icon {
             width: 16px;
             height: 16px;
-            opacity: 0.8;
         }
 
         .profile-main {
@@ -92,7 +237,6 @@
             font-size: 44px;
             font-weight: 800;
             letter-spacing: -1px;
-            min-width: 40px;
         }
 
         .custom-pill-badge {
@@ -113,27 +257,20 @@
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
-            background-color: transparent; 
         }
 
         .profile-subtext {
             font-size: 16px;
-            color: var(--text-sub);
+            color: rgba(255, 255, 255, 0.7);
             margin-top: 4px;
-            font-weight: 400;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
 
-        .widget-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
-        }
-
+        /* --- PLATFORM ROTATOR --- */
         .dynamic-widget {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 18px;
             padding: 24px;
             display: flex;
@@ -142,13 +279,10 @@
             position: relative;
             min-height: 114px; 
             width: 100%;
-            overflow: hidden;
         }
 
         .widget-anim-target {
             transition: opacity 0.25s ease, transform 0.25s ease;
-            opacity: 1;
-            transform: translateX(0);
         }
 
         .widget-anim-target.swipe-hide {
@@ -167,7 +301,6 @@
             height: 64px;
             border-radius: 50%;
             object-fit: cover;
-            background: rgba(0, 0, 0, 0.5);
         }
 
         .widget-info-block h3 {
@@ -188,25 +321,17 @@
 
         .widget-badge-img {
             height: 16px;
-            object-fit: contain;
         }
 
         .widget-stats-row {
             display: flex;
             gap: 12px;
             font-size: 13px;
-            color: var(--text-sub);
-            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .stat-dot-separator {
             opacity: 0.5;
-            font-size: 11px;
-        }
-
-        .widget-stats-row strong {
-            color: #ffffff;
-            font-weight: 600;
         }
 
         .platform-label-tag {
@@ -220,7 +345,7 @@
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1.5px;
-            color: var(--text-sub);
+            color: rgba(255, 255, 255, 0.6);
             text-transform: uppercase;
         }
 
@@ -233,99 +358,349 @@
             font-weight: 600;
             padding: 10px 18px;
             border-radius: 10px;
-            transition: background 0.2s, transform 0.2s;
-            margin-top: auto;
+            transition: background 0.2s;
             align-self: flex-end;
         }
 
         .view-profile-action-btn:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
         }
 
         .widget-dots-nav {
             display: flex;
             gap: 8px;
-            margin-top: 4px;
+            margin-top: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
         }
 
         .nav-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.3);
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dot:hover {
-            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.2s;
         }
 
         .nav-dot.active {
             background: #ffffff;
-            transform: scale(1.1);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            transform: scale(1.2);
         }
+
+        /* --- FLOATING SONG WIDGET --- */
+        .music-widget {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            gap: 16px;
+        }
+
+        .music-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 180px;
+        }
+
+        .music-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: spin 6s linear infinite;
+            animation-play-state: paused;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .music-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .music-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .music-artist {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .music-timeline-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-text {
+            font-size: 12px;
+            color: var(--text-sub);
+            min-width: 32px;
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-pink);
+            border-radius: 2px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .music-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            padding-left: 8px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .control-btn:hover { color: #fff; }
+        .play-pause-btn { color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="profile-card" id="tilt-card">
-        <div class="card-top">
-            <div class="view-counter">
-                <svg class="view-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <span id="view-count">1242</span>
-            </div>
-        </div>
+    <!-- OVERLAY LAYER -->
+    <div id="entry-overlay" onclick="dismissOverlay()">
+        <div id="entry-text">click</div>
+    </div>
 
-        <div class="profile-main">
-            <div class="profile-headline-container">
-                <h1 class="profile-title" id="main-display-name">r</h1>
-                
-                <div class="custom-pill-badge">
-                    <div class="badge-icon"></div>
+    <!-- MAIN SCROLL VIEWS CONTAINER -->
+    <div id="scroll-wrapper">
+
+        <!-- PAGE 1 -->
+        <section class="page-section active-page" id="page-1">
+            <div id="first-page-view" class="scroll-animated active">
+                <img src="main.png" alt="Main Display Image">
+                <div class="scroll-hint-wrapper">
+                    <span class="scroll-hint">scroll for more</span>
+                    <span class="scroll-arrow">↓</span>
                 </div>
             </div>
-            <p class="profile-subtext">Money speaks sense in a language all nations understand.</p>
-        </div>
+        </section>
 
-        <div class="widget-wrapper">
-            <div class="dynamic-widget" id="platform-widget">
-                <div class="widget-left widget-anim-target" id="widget-content-left">
-                    <img src="" alt="Avatar" class="widget-avatar" id="widget-pfp">
-                    
-                    <div class="widget-info-block">
-                        <h3>
-                            <span id="widget-display-name"></span>
-                            <img src="" alt="Verified" class="widget-badge-img" id="widget-verified-icon">
-                        </h3>
-                        <span id="widget-handle" class="widget-username-sub"></span>
+        <!-- PAGE 2 -->
+        <section class="page-section" id="page-2">
+            <div class="page-container scroll-animated fade-from-bottom">
+                
+                <div class="profile-card" id="tilt-card">
+                    <div class="card-top">
+                        <div class="view-counter">
+                            <svg class="view-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span id="view-count">1247</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-main">
+                        <div class="profile-headline-container">
+                            <h1 class="profile-title" id="main-display-name">relapse</h1>
+                            <div class="custom-pill-badge">
+                                <div class="badge-icon"></div>
+                            </div>
+                        </div>
+                        <p class="profile-subtext">Money speaks sense in a language all nations understand.</p>
+                    </div>
+
+                    <div class="dynamic-widget" id="platform-widget">
+                        <div class="widget-left widget-anim-target" id="widget-content-left">
+                            <img src="" alt="Avatar" class="widget-avatar" id="widget-pfp">
+                            <div class="widget-info-block">
+                                <h3>
+                                    <span id="widget-display-name"></span>
+                                    <img src="" alt="Verified" class="widget-badge-img" id="widget-verified-icon">
+                                </h3>
+                                <span id="widget-handle" class="widget-username-sub"></span>
+                                <div class="widget-stats-row" id="widget-stats-container"></div>
+                            </div>
+                        </div>
+                        <div class="platform-label-tag widget-anim-target" id="widget-platform-tag"></div>
+                        <a href="" target="_blank" class="view-profile-action-btn widget-anim-target" id="widget-action-btn">View Profile ↗</a>
+                    </div>
+
+                    <div class="widget-dots-nav">
+                        <div class="nav-dot active" onclick="manualPlatformSwitch(0)"></div>
+                        <div class="nav-dot" onclick="manualPlatformSwitch(1)"></div>
+                    </div>
+
+                    <div class="music-widget">
+                        <div class="music-left">
+                            <img src="bluebands.webp" alt="Album Art" class="music-avatar" id="music-art">
+                            <div class="music-info">
+                                <h4>Blue Bands</h4>
+                                <span class="music-artist">Weiland</span>
+                            </div>
+                        </div>
                         
-                        <div class="widget-stats-row" id="widget-stats-container"></div>
+                        <div class="music-timeline-container">
+                            <span class="time-text" id="current-time">0:00</span>
+                            <div class="progress-container" id="progress-container">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <span class="time-text" id="duration">0:00</span>
+                        </div>
+
+                        <div class="music-right-controls">
+                            <button class="control-btn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6L18 6v12z"/></svg>
+                            </button>
+                            <button class="control-btn play-pause-btn" id="play-btn">
+                                <svg id="play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                <svg id="pause-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            </button>
+                            <button class="control-btn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6zm9-12v12h2V6z"/></svg>
+                            </button>
+                        </div>
+
+                        <audio id="audio-element" src="BlueBands.mp3" preload="metadata"></audio>
                     </div>
                 </div>
 
-                <div class="platform-label-tag widget-anim-target" id="widget-platform-tag"></div>
-                
-                <a href="" target="_blank" class="view-profile-action-btn widget-anim-target" id="widget-action-btn">View Profile ↗</a>
             </div>
+        </section>
 
-            <div class="widget-dots-nav">
-                <div class="nav-dot active" onclick="manualPlatformSwitch(0)"></div>
-                <div class="nav-dot" onclick="manualPlatformSwitch(1)"></div>
-            </div>
-        </div>
     </div>
 
     <script>
-        // --- FIXED TYPEWRITER LOOP CONFIG ---
+        let currentPage = 1;
+        const totalPages = 2;
+        let isScrolling = false;
+        let isUnlocked = false; 
+
+        const p1 = document.getElementById('page-1');
+        const p2 = document.getElementById('page-2');
+        const animatedP1 = p1.querySelector('.scroll-animated');
+        const animatedP2 = p2.querySelector('.scroll-animated');
+
+        function goToPage(pageIndex) {
+            if (pageIndex < 1 || pageIndex > totalPages || pageIndex === currentPage) return;
+            isScrolling = true;
+            
+            const goingDown = pageIndex > currentPage;
+            currentPage = pageIndex;
+
+            p1.style.transition = "transform 2s cubic-bezier(0.15, 0.85, 0.25, 1)";
+            p2.style.transition = "transform 2s cubic-bezier(0.15, 0.85, 0.25, 1)";
+
+            if (currentPage === 1) {
+                p1.style.transform = "translateY(0vh)";
+                p2.style.transform = "translateY(100vh)";
+                p1.classList.add('active-page');
+                p2.classList.remove('active-page');
+            } else if (currentPage === 2) {
+                p1.style.transform = "translateY(-100vh)";
+                p2.style.transform = "translateY(0vh)";
+                p2.classList.add('active-page');
+                p1.classList.remove('active-page');
+            }
+
+            if (goingDown) {
+                animatedP1.classList.remove('active', 'fade-from-bottom');
+                animatedP1.classList.add('fade-from-top');
+                animatedP2.classList.remove('fade-from-top');
+                animatedP2.classList.add('fade-from-bottom');
+                animatedP2.offsetHeight; 
+                animatedP2.classList.add('active');
+            } else {
+                animatedP2.classList.remove('active', 'fade-from-top');
+                animatedP2.classList.add('fade-from-bottom');
+                animatedP1.classList.remove('fade-from-bottom');
+                animatedP1.classList.add('fade-from-top');
+                animatedP1.offsetHeight; 
+                animatedP1.classList.add('active');
+            }
+
+            setTimeout(() => {
+                isScrolling = false;
+            }, 2000);
+        }
+
+        window.addEventListener('wheel', (e) => {
+            if (!isUnlocked || isScrolling) return;
+            if (e.deltaY > 15) {
+                goToPage(currentPage + 1);
+            } else if (e.deltaY < -15) {
+                goToPage(currentPage - 1);
+            }
+        }, { passive: true });
+
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isUnlocked || isScrolling) return;
+            const touchEndY = e.touches[0].clientY;
+            const diffY = touchStartY - touchEndY;
+
+            if (diffY > 40) {
+                goToPage(currentPage + 1);
+            } else if (diffY < -40) {
+                goToPage(currentPage - 1);
+            }
+        }, { passive: true });
+
+        function dismissOverlay() {
+            document.getElementById('entry-overlay').classList.add('fade-out');
+            isUnlocked = true; 
+            
+            const audio = document.getElementById('audio-element');
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            const musicArt = document.getElementById('music-art');
+            
+            audio.play().then(() => {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                musicArt.style.animationPlayState = 'running';
+            }).catch(err => console.log("Playback system initialized."));
+        }
+
         const typingSequence = ["r", "re", "rel", "rela", "relap", "relaps", "relapse", "relaps", "relap", "rela", "rel", "re"];
         let typingIndex = 0;
-
         function handleTypecycleAnimations() {
             const currentString = typingSequence[typingIndex];
             document.title = "@" + currentString;
@@ -334,7 +709,6 @@
         }
         setInterval(handleTypecycleAnimations, 350);
 
-        // --- DYNAMIC ROTATION DATA CONFIG ---
         const platformData = [
             {
                 platform: "Roblox",
@@ -363,82 +737,106 @@
 
         function updateWidgetPlatform(index) {
             targetElements.forEach(el => el.classList.add('swipe-hide'));
-
             setTimeout(() => {
                 const currentData = platformData[index];
-                
                 document.getElementById('widget-pfp').src = currentData.pfpUrl;
                 document.getElementById('widget-display-name').innerText = currentData.displayName;
                 document.getElementById('widget-verified-icon').src = currentData.verifiedIcon;
-                
-                const handleEl = document.getElementById('widget-handle');
-                if(currentData.handle) {
-                    handleEl.innerText = currentData.handle;
-                    handleEl.style.display = "block";
-                } else {
-                    handleEl.style.display = "none";
-                }
-
+                document.getElementById('widget-handle').innerText = currentData.handle;
                 document.getElementById('widget-stats-container').innerHTML = currentData.statsHtml;
                 document.getElementById('widget-platform-tag').innerText = currentData.platform;
                 document.getElementById('widget-action-btn').href = currentData.profileUrl;
 
                 dots.forEach((dot, dIdx) => {
-                    if(dIdx === index) dot.classList.add('active');
-                    else dot.classList.remove('active');
+                    dot.classList.toggle('active', dIdx === index);
                 });
-
                 targetElements.forEach(el => el.classList.remove('swipe-hide'));
                 activePlatformIndex = index;
-            }, 250); 
-        }
-
-        function autoCycle() {
-            let nextIndex = (activePlatformIndex + 1) % platformData.length;
-            updateWidgetPlatform(nextIndex);
+            }, 250);
         }
 
         function startLoopTimer() {
             clearInterval(rotationInterval);
-            rotationInterval = setInterval(autoCycle, 7000);
+            rotationInterval = setInterval(() => {
+                updateWidgetPlatform((activePlatformIndex + 1) % platformData.length);
+            }, 7000);
         }
 
         function manualPlatformSwitch(targetIndex) {
             if (targetIndex === activePlatformIndex) return;
             updateWidgetPlatform(targetIndex);
-            startLoopTimer(); 
+            startLoopTimer();
         }
 
         updateWidgetPlatform(0);
         startLoopTimer();
 
-        // --- VIEW COUNTER SYSTEM ---
-        const BASELINE_VIEWS = 1242; 
-
-        function handleViews() {
-            let currentViews = localStorage.getItem('profile_views_final');
-            if (!currentViews) {
-                currentViews = BASELINE_VIEWS + 1;
-            } else {
-                currentViews = parseInt(currentViews) + 1;
-            }
-            localStorage.setItem('profile_views_final', currentViews);
-            document.getElementById('view-count').innerText = currentViews;
-        }
-
-        // --- TILT ANIMATION ---
         const card = document.getElementById('tilt-card');
         document.addEventListener('mousemove', (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+            if (currentPage !== 2) return; 
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 35;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 35;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
         });
-
         document.addEventListener('mouseleave', () => {
             card.style.transform = `rotateY(0deg) rotateX(0deg)`;
         });
 
-        window.addEventListener('DOMContentLoaded', handleViews);
+        const playBtn = document.getElementById('play-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+        const audio = document.getElementById('audio-element');
+        const musicArt = document.getElementById('music-art');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.innerText = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percentage = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = `${percentage}%`;
+                currentTimeEl.innerText = formatTime(audio.currentTime);
+            }
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().catch(err => console.log(err));
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                musicArt.style.animationPlayState = 'running';
+            } else {
+                audio.pause();
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                musicArt.style.animationPlayState = 'paused';
+            }
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const clickRatio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            if (audio.duration) audio.currentTime = clickRatio * audio.duration;
+        });
+
+        audio.addEventListener('ended', () => {
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            musicArt.style.animationPlayState = 'paused';
+            audio.currentTime = 0;
+        });
     </script>
 </body>
 </html>
