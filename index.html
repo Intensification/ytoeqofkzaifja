@@ -37,15 +37,15 @@
             min-height: 100vh;
         }
 
-        /* --- UPDATED: 60% TRANSPARENT TINT BLUR OVERLAY (Reveals background content underneath) --- */
+        /* --- 60% TRANSPARENT TINT BLUR OVERLAY --- */
         #entry-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(255, 255, 255, 0.08); /* Transparent layout white tint balance */
-            backdrop-filter: blur(14px) brightness(0.6); /* Softened blur and optimized brightness matrix for 60% clear pass-through */
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(14px) brightness(0.6); 
             -webkit-backdrop-filter: blur(14px) brightness(0.6);
             display: flex;
             justify-content: center;
@@ -101,7 +101,7 @@
         #page-1 { transform: translateY(0vh); }
         #page-2 { transform: translateY(100vh); }
 
-        /* --- BALANCED DIRECTIONAL SCROLL TRANSITIONS (2s) --- */
+        /* --- BALANCED DIRECTIONAL SCROLL TRANSITIONS --- */
         .scroll-animated {
             opacity: 0;
             transition: transform 2s cubic-bezier(0.15, 0.85, 0.25, 1), opacity 2s cubic-bezier(0.15, 0.85, 0.25, 1);
@@ -163,14 +163,8 @@
         }
 
         @keyframes floatIndicator {
-            0%, 100% {
-                transform: translateY(0);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translateY(12px);
-                opacity: 0.9;
-            }
+            0%, 100% { transform: translateY(0); opacity: 0.3; }
+            50% { transform: translateY(12px); opacity: 0.9; }
         }
 
         /* --- SECOND PAGE SPECIFICS --- */
@@ -495,19 +489,76 @@
 
         .control-btn:hover { color: #fff; }
         .play-pause-btn { color: #fff; }
+
+        /* --- NEW STYLES: COMPREHENSIVE RESPONSIVE DESIGN FOR MOBILE SCREENS --- */
+        @media (max-width: 520px) {
+            .profile-card {
+                padding: 24px 16px; /* Tighten external bounds padding so it doesn't push elements off edge */
+            }
+            .profile-title {
+                font-size: 36px;
+            }
+            
+            /* Platform Rotator Mobile Fixes */
+            .dynamic-widget {
+                padding: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                min-height: auto;
+            }
+            .widget-left {
+                width: 100%;
+            }
+            .widget-stats-row {
+                flex-wrap: wrap; /* Allows text elements to naturally stack instead of breaking boundaries */
+                gap: 6px 10px;
+            }
+            .stat-dot-separator {
+                display: none; /* Hide delimiters when stacked or wrapped tightly */
+            }
+            .platform-label-tag {
+                position: static;
+                order: -1; /* Shifts tags above main header lines on small interfaces */
+                margin-bottom: -4px;
+            }
+            .view-profile-action-btn {
+                align-self: flex-end;
+                margin-top: -8px;
+                width: auto;
+            }
+
+            /* Music Widget Mobile Fixes */
+            .music-widget {
+                padding: 16px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+            .music-left {
+                min-width: auto;
+                justify-content: flex-start;
+            }
+            .music-timeline-container {
+                width: 100%;
+                margin: 4px 0;
+            }
+            .music-right-controls {
+                justify-content: center;
+                padding-left: 0;
+                gap: 24px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- OVERLAY LAYER -->
     <div id="entry-overlay" onclick="dismissOverlay()">
         <div id="entry-text">click</div>
     </div>
 
-    <!-- MAIN SCROLL VIEWS CONTAINER -->
     <div id="scroll-wrapper">
 
-        <!-- PAGE 1 -->
         <section class="page-section active-page" id="page-1">
             <div id="first-page-view" class="scroll-animated active">
                 <img src="main.png" alt="Main Display Image">
@@ -518,7 +569,6 @@
             </div>
         </section>
 
-        <!-- PAGE 2 -->
         <section class="page-section" id="page-2">
             <div class="page-container scroll-animated fade-from-bottom">
                 
@@ -696,7 +746,7 @@
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
                 musicArt.style.animationPlayState = 'running';
-            }).catch(err => console.log("Playback system initialized."));
+            }).catch(err => console.log(err));
         }
 
         const typingSequence = ["r", "re", "rel", "rela", "relap", "relaps", "relapse", "relaps", "relap", "rela", "rel", "re"];
