@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@r</title>
+    <style>
+        :root {
+            --text-main: #ffffff;
+            --text-sub: #d4d4d8; /* Tuned up to a brighter platinum white for perfect readability */
+            --bg-image: url('image_51ee3f.jpg'); 
+            
+            /* Your Nitro Badges Roll GIF */
+            --custom-badge-url: url('https://cdn3.emoji.gg/emojis/3190-nitrobadgesroll.gif');
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 640px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .view-counter {
+            font-size: 14px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .view-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+        }
+
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 35px;
+        }
+
+        .profile-headline-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .profile-title {
+            font-size: 44px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            min-width: 40px;
+        }
+
+        .custom-pill-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .badge-icon {
+            width: 20px;
+            height: 20px;
+            background-image: var(--custom-badge-url);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: transparent; 
+        }
+
+        .profile-subtext {
+            font-size: 16px;
+            color: var(--text-sub);
+            margin-top: 4px;
+            font-weight: 400;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Adds a crisp separation layer */
+        }
+
+        .widget-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .dynamic-widget {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 18px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            min-height: 114px; 
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .widget-anim-target {
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .widget-anim-target.swipe-hide {
+            opacity: 0;
+            transform: translateX(-15px);
+        }
+
+        .widget-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .widget-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .widget-info-block h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .widget-username-sub {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .widget-badge-img {
+            height: 16px;
+            object-fit: contain;
+        }
+
+        .widget-stats-row {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-sub);
+            align-items: center;
+        }
+
+        .stat-dot-separator {
+            opacity: 0.5;
+            font-size: 11px;
+        }
+
+        .widget-stats-row strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .platform-label-tag {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .view-profile-action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 10px;
+            transition: background 0.2s, transform 0.2s;
+            margin-top: auto;
+            align-self: flex-end;
+        }
+
+        .view-profile-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .widget-dots-nav {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dot:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-dot.active {
+            background: #ffffff;
+            transform: scale(1.1);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card" id="tilt-card">
+        <div class="card-top">
+            <div class="view-counter">
+                <svg class="view-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span id="view-count">1242</span>
+            </div>
+        </div>
+
+        <div class="profile-main">
+            <div class="profile-headline-container">
+                <h1 class="profile-title" id="main-display-name">r</h1>
+                
+                <div class="custom-pill-badge">
+                    <div class="badge-icon"></div>
+                </div>
+            </div>
+            <p class="profile-subtext">Money speaks sense in a language all nations understand.</p>
+        </div>
+
+        <div class="widget-wrapper">
+            <div class="dynamic-widget" id="platform-widget">
+                <div class="widget-left widget-anim-target" id="widget-content-left">
+                    <img src="" alt="Avatar" class="widget-avatar" id="widget-pfp">
+                    
+                    <div class="widget-info-block">
+                        <h3>
+                            <span id="widget-display-name"></span>
+                            <img src="" alt="Verified" class="widget-badge-img" id="widget-verified-icon">
+                        </h3>
+                        <span id="widget-handle" class="widget-username-sub"></span>
+                        
+                        <div class="widget-stats-row" id="widget-stats-container"></div>
+                    </div>
+                </div>
+
+                <div class="platform-label-tag widget-anim-target" id="widget-platform-tag"></div>
+                
+                <a href="" target="_blank" class="view-profile-action-btn widget-anim-target" id="widget-action-btn">View Profile ↗</a>
+            </div>
+
+            <div class="widget-dots-nav">
+                <div class="nav-dot active" onclick="manualPlatformSwitch(0)"></div>
+                <div class="nav-dot" onclick="manualPlatformSwitch(1)"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- FIXED TYPEWRITER LOOP CONFIG ---
+        const typingSequence = ["r", "re", "rel", "rela", "relap", "relaps", "relapse", "relaps", "relap", "rela", "rel", "re"];
+        let typingIndex = 0;
+
+        function handleTypecycleAnimations() {
+            const currentString = typingSequence[typingIndex];
+            document.title = "@" + currentString;
+            document.getElementById('main-display-name').innerText = currentString;
+            typingIndex = (typingIndex + 1) % typingSequence.length;
+        }
+        setInterval(handleTypecycleAnimations, 350);
+
+        // --- DYNAMIC ROTATION DATA CONFIG ---
+        const platformData = [
+            {
+                platform: "Roblox",
+                displayName: "yng",
+                handle: "", 
+                pfpUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-593CFEAFA18BFC82D8469ED2DFBEF75B-Png/150/150/AvatarHeadshot/Webp/noFilter",
+                verifiedIcon: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.wikia.nocookie.net%2Froblox%2Fimages%2Fe%2Fe4%2FRoblox_Verified_Badge.png%2Frevision%2Flatest%2Fscale-to-width-down%2F180%3Fcb%3D20220920020249&f=1&nofb=1&ipt=7d50722c9e2fa2c32f96fce2804d9b98e543c3e1faca27c67c96578ff2f2340d",
+                profileUrl: "https://www.roblox.com/users/1436002/profile",
+                statsHtml: `<span><strong>30</strong> Friends</span><span class="stat-dot-separator">•</span><span><strong>125.3K</strong> Followers</span>`
+            },
+            {
+                platform: "TikTok",
+                displayName: "Malone Lam",
+                handle: "@axurxa",
+                pfpUrl: "https://p16-common-sign.tiktokcdn-eu.com/tos-no1a-avt-0068c001-no/4872cdbf097d4dd4a52650d28d19fe51~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=10399&refresh_token=4e764953&x-expires=1782428400&x-signature=xVRL1dlrxmvI28qWbGV4LoEFITM%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast2b",
+                verifiedIcon: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngmart.com%2Ffiles%2F12%2FTikTok-Verified-Badge-PNG-Photos.png&f=1&nofb=1&ipt=e25d124d927a162821fab1af9755f6e2448a149ed9f9a8f3e04017bffe98c5b6",
+                profileUrl: "https://www.tiktok.com/@axurxa",
+                statsHtml: `<span><strong>5</strong> Following</span><span class="stat-dot-separator">•</span><span><strong>345.9K</strong> Followers</span><span class="stat-dot-separator">•</span><span><strong>3.4M</strong> Likes</span>`
+            }
+        ];
+
+        let activePlatformIndex = 0;
+        let rotationInterval = null;
+        const targetElements = document.querySelectorAll('.widget-anim-target');
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function updateWidgetPlatform(index) {
+            targetElements.forEach(el => el.classList.add('swipe-hide'));
+
+            setTimeout(() => {
+                const currentData = platformData[index];
+                
+                document.getElementById('widget-pfp').src = currentData.pfpUrl;
+                document.getElementById('widget-display-name').innerText = currentData.displayName;
+                document.getElementById('widget-verified-icon').src = currentData.verifiedIcon;
+                
+                const handleEl = document.getElementById('widget-handle');
+                if(currentData.handle) {
+                    handleEl.innerText = currentData.handle;
+                    handleEl.style.display = "block";
+                } else {
+                    handleEl.style.display = "none";
+                }
+
+                document.getElementById('widget-stats-container').innerHTML = currentData.statsHtml;
+                document.getElementById('widget-platform-tag').innerText = currentData.platform;
+                document.getElementById('widget-action-btn').href = currentData.profileUrl;
+
+                dots.forEach((dot, dIdx) => {
+                    if(dIdx === index) dot.classList.add('active');
+                    else dot.classList.remove('active');
+                });
+
+                targetElements.forEach(el => el.classList.remove('swipe-hide'));
+                activePlatformIndex = index;
+            }, 250); 
+        }
+
+        function autoCycle() {
+            let nextIndex = (activePlatformIndex + 1) % platformData.length;
+            updateWidgetPlatform(nextIndex);
+        }
+
+        function startLoopTimer() {
+            clearInterval(rotationInterval);
+            rotationInterval = setInterval(autoCycle, 7000);
+        }
+
+        function manualPlatformSwitch(targetIndex) {
+            if (targetIndex === activePlatformIndex) return;
+            updateWidgetPlatform(targetIndex);
+            startLoopTimer(); 
+        }
+
+        updateWidgetPlatform(0);
+        startLoopTimer();
+
+        // --- VIEW COUNTER SYSTEM ---
+        const BASELINE_VIEWS = 1242; 
+
+        function handleViews() {
+            let currentViews = localStorage.getItem('profile_views_final');
+            if (!currentViews) {
+                currentViews = BASELINE_VIEWS + 1;
+            } else {
+                currentViews = parseInt(currentViews) + 1;
+            }
+            localStorage.setItem('profile_views_final', currentViews);
+            document.getElementById('view-count').innerText = currentViews;
+        }
+
+        // --- TILT ANIMATION ---
+        const card = document.getElementById('tilt-card');
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+
+        window.addEventListener('DOMContentLoaded', handleViews);
+    </script>
+</body>
+</html>
