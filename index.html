@@ -37,7 +37,6 @@
             min-height: 100vh;
         }
 
-        /* --- 60% TRANSPARENT TINT BLUR OVERLAY --- */
         #entry-overlay {
             position: fixed;
             top: 0;
@@ -61,7 +60,6 @@
             pointer-events: none;
         }
 
-        /* --- MONOSPACE WHITE CLICK WITH SHADOW --- */
         #entry-text {
             color: var(--text-main); 
             font-family: "Courier New", Courier, Courier Prime, Monaco, monospace; 
@@ -73,7 +71,6 @@
             user-select: none;
         }
 
-        /* --- CONTAINER WRAPPERS --- */
         #scroll-wrapper {
             width: 100vw;
             height: 100vh;
@@ -101,7 +98,6 @@
         #page-1 { transform: translateY(0vh); }
         #page-2 { transform: translateY(100vh); }
 
-        /* --- BALANCED DIRECTIONAL SCROLL TRANSITIONS --- */
         .scroll-animated {
             opacity: 0;
             transition: transform 2s cubic-bezier(0.15, 0.85, 0.25, 1), opacity 2s cubic-bezier(0.15, 0.85, 0.25, 1);
@@ -112,15 +108,9 @@
             transform: translateY(0) !important;
         }
 
-        .fade-from-bottom {
-            transform: translateY(120px);
-        }
+        .fade-from-bottom { transform: translateY(120px); }
+        .fade-from-top { transform: translateY(-120px); }
 
-        .fade-from-top {
-            transform: translateY(-120px);
-        }
-
-        /* --- FIRST PAGE SPECIFICS --- */
         #first-page-view {
             display: flex;
             flex-direction: column;
@@ -167,7 +157,6 @@
             50% { transform: translateY(12px); opacity: 0.9; }
         }
 
-        /* --- SECOND PAGE SPECIFICS --- */
         .page-container {
             display: flex;
             flex-direction: column;
@@ -178,7 +167,6 @@
             perspective: 1000px;
         }
 
-        /* --- MAIN PROFILE CARD --- */
         .profile-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
@@ -193,11 +181,7 @@
             transition: transform 0.1s ease-out;
         }
 
-        .card-top {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 15px;
-        }
+        .card-top { display: flex; justify-content: flex-end; margin-bottom: 15px; }
 
         .view-counter {
             font-size: 14px;
@@ -209,29 +193,13 @@
             opacity: 0.8;
         }
 
-        .view-icon {
-            width: 16px;
-            height: 16px;
-        }
+        .view-icon { width: 16px; height: 16px; }
 
-        .profile-main {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 35px;
-        }
+        .profile-main { display: flex; flex-direction: column; gap: 12px; margin-bottom: 35px; }
 
-        .profile-headline-container {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+        .profile-headline-container { display: flex; align-items: center; gap: 14px; }
 
-        .profile-title {
-            font-size: 44px;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
+        .profile-title { font-size: 44px; font-weight: 800; letter-spacing: -1px; }
 
         .custom-pill-badge {
             display: inline-flex;
@@ -253,13 +221,8 @@
             background-repeat: no-repeat;
         }
 
-        .profile-subtext {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 4px;
-        }
+        .profile-subtext { font-size: 16px; color: rgba(255, 255, 255, 0.7); margin-top: 4px; }
 
-        /* --- PLATFORM ROTATOR --- */
         .dynamic-widget {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
@@ -275,58 +238,22 @@
             width: 100%;
         }
 
-        .widget-anim-target {
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
+        .widget-anim-target { transition: opacity 0.25s ease, transform 0.25s ease; }
+        .widget-anim-target.swipe-hide { opacity: 0; transform: translateX(-15px); }
 
-        .widget-anim-target.swipe-hide {
-            opacity: 0;
-            transform: translateX(-15px);
-        }
+        .widget-left { display: flex; align-items: center; gap: 18px; }
 
-        .widget-left {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
+        .widget-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
 
-        .widget-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+        .widget-info-block h3 { font-size: 18px; font-weight: 700; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; }
 
-        .widget-info-block h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 2px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .widget-username-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 6px; display: block; }
 
-        .widget-username-sub {
-            font-size: 13px;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-            display: block;
-        }
+        .widget-badge-img { height: 16px; }
 
-        .widget-badge-img {
-            height: 16px;
-        }
+        .widget-stats-row { display: flex; gap: 12px; font-size: 13px; color: rgba(255, 255, 255, 0.6); }
 
-        .widget-stats-row {
-            display: flex;
-            gap: 12px;
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .stat-dot-separator {
-            opacity: 0.5;
-        }
+        .stat-dot-separator { opacity: 0.5; }
 
         .platform-label-tag {
             position: absolute;
@@ -356,33 +283,13 @@
             align-self: flex-end;
         }
 
-        .view-profile-action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
+        .view-profile-action-btn:hover { background: rgba(255, 255, 255, 0.1); }
 
-        .widget-dots-nav {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
+        .widget-dots-nav { display: flex; gap: 8px; margin-top: 12px; justify-content: center; margin-bottom: 24px; }
 
-        .nav-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; transition: all 0.2s; }
+        .nav-dot.active { background: #ffffff; transform: scale(1.2); }
 
-        .nav-dot.active {
-            background: #ffffff;
-            transform: scale(1.2);
-        }
-
-        /* --- FLOATING SONG WIDGET --- */
         .music-widget {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
@@ -397,12 +304,7 @@
             gap: 16px;
         }
 
-        .music-left {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            min-width: 180px;
-        }
+        .music-left { display: flex; align-items: center; gap: 14px; min-width: 180px; }
 
         .music-avatar {
             width: 48px;
@@ -414,140 +316,40 @@
             animation-play-state: paused;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .music-info {
-            display: flex;
-            flex-direction: column;
-        }
+        .music-info { display: flex; flex-direction: column; }
+        .music-info h4 { font-size: 14px; font-weight: 600; color: #fff; }
+        .music-artist { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
 
-        .music-info h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-        }
+        .music-timeline-container { flex-grow: 1; display: flex; align-items: center; gap: 12px; }
 
-        .music-artist {
-            font-size: 12px;
-            color: var(--text-sub);
-            margin-top: 2px;
-        }
+        .time-text { font-size: 12px; color: var(--text-sub); min-width: 32px; }
 
-        .music-timeline-container {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .progress-container { flex-grow: 1; height: 4px; background: rgba(255, 255, 255, 0.15); border-radius: 2px; position: relative; cursor: pointer; }
 
-        .time-text {
-            font-size: 12px;
-            color: var(--text-sub);
-            min-width: 32px;
-        }
+        .progress-bar { height: 100%; width: 0%; background: var(--accent-pink); border-radius: 2px; position: absolute; top: 0; left: 0; }
 
-        .progress-container {
-            flex-grow: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 2px;
-            position: relative;
-            cursor: pointer;
-        }
+        .music-right-controls { display: flex; align-items: center; gap: 16px; color: rgba(255, 255, 255, 0.4); padding-left: 8px; }
 
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-pink);
-            border-radius: 2px;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .music-right-controls {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            color: rgba(255, 255, 255, 0.4);
-            padding-left: 8px;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s;
-        }
+        .control-btn { background: none; border: none; color: rgba(255, 255, 255, 0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
 
         .control-btn:hover { color: #fff; }
         .play-pause-btn { color: #fff; }
 
-        /* --- NEW STYLES: COMPREHENSIVE RESPONSIVE DESIGN FOR MOBILE SCREENS --- */
         @media (max-width: 520px) {
-            .profile-card {
-                padding: 24px 16px; /* Tighten external bounds padding so it doesn't push elements off edge */
-            }
-            .profile-title {
-                font-size: 36px;
-            }
-            
-            /* Platform Rotator Mobile Fixes */
-            .dynamic-widget {
-                padding: 16px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-                min-height: auto;
-            }
-            .widget-left {
-                width: 100%;
-            }
-            .widget-stats-row {
-                flex-wrap: wrap; /* Allows text elements to naturally stack instead of breaking boundaries */
-                gap: 6px 10px;
-            }
-            .stat-dot-separator {
-                display: none; /* Hide delimiters when stacked or wrapped tightly */
-            }
-            .platform-label-tag {
-                position: static;
-                order: -1; /* Shifts tags above main header lines on small interfaces */
-                margin-bottom: -4px;
-            }
-            .view-profile-action-btn {
-                align-self: flex-end;
-                margin-top: -8px;
-                width: auto;
-            }
-
-            /* Music Widget Mobile Fixes */
-            .music-widget {
-                padding: 16px;
-                flex-direction: column;
-                align-items: stretch;
-                gap: 16px;
-            }
-            .music-left {
-                min-width: auto;
-                justify-content: flex-start;
-            }
-            .music-timeline-container {
-                width: 100%;
-                margin: 4px 0;
-            }
-            .music-right-controls {
-                justify-content: center;
-                padding-left: 0;
-                gap: 24px;
-            }
+            .profile-card { padding: 24px 16px; }
+            .profile-title { font-size: 36px; }
+            .dynamic-widget { padding: 16px; flex-direction: column; align-items: flex-start; gap: 16px; min-height: auto; }
+            .widget-left { width: 100%; }
+            .widget-stats-row { flex-wrap: wrap; gap: 6px 10px; }
+            .stat-dot-separator { display: none; }
+            .platform-label-tag { position: static; order: -1; margin-bottom: -4px; }
+            .view-profile-action-btn { align-self: flex-end; margin-top: -8px; width: auto; }
+            .music-widget { padding: 16px; flex-direction: column; align-items: stretch; gap: 16px; }
+            .music-left { min-width: auto; justify-content: flex-start; }
+            .music-timeline-container { width: 100%; margin: 4px 0; }
+            .music-right-controls { justify-content: center; padding-left: 0; gap: 24px; }
         }
     </style>
 </head>
@@ -558,7 +360,6 @@
     </div>
 
     <div id="scroll-wrapper">
-
         <section class="page-section active-page" id="page-1">
             <div id="first-page-view" class="scroll-animated active">
                 <img src="main.png" alt="Main Display Image">
@@ -571,7 +372,6 @@
 
         <section class="page-section" id="page-2">
             <div class="page-container scroll-animated fade-from-bottom">
-                
                 <div class="profile-card" id="tilt-card">
                     <div class="card-top">
                         <div class="view-counter">
@@ -579,7 +379,7 @@
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
-                            <span id="view-count">1247</span>
+                            <span id="view-count">0</span>
                         </div>
                     </div>
 
@@ -632,25 +432,18 @@
                         </div>
 
                         <div class="music-right-controls">
-                            <button class="control-btn">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6L18 6v12z"/></svg>
-                            </button>
+                            <button class="control-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6L18 6v12z"/></svg></button>
                             <button class="control-btn play-pause-btn" id="play-btn">
                                 <svg id="play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                                 <svg id="pause-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                             </button>
-                            <button class="control-btn">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6zm9-12v12h2V6z"/></svg>
-                            </button>
+                            <button class="control-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6zm9-12v12h2V6z"/></svg></button>
                         </div>
-
                         <audio id="audio-element" src="BlueBands.mp3" preload="metadata"></audio>
                     </div>
                 </div>
-
             </div>
         </section>
-
     </div>
 
     <script>
@@ -658,6 +451,7 @@
         const totalPages = 2;
         let isScrolling = false;
         let isUnlocked = false; 
+        let hasAnimatedViews = false;
 
         const p1 = document.getElementById('page-1');
         const p2 = document.getElementById('page-2');
@@ -667,7 +461,6 @@
         function goToPage(pageIndex) {
             if (pageIndex < 1 || pageIndex > totalPages || pageIndex === currentPage) return;
             isScrolling = true;
-            
             const goingDown = pageIndex > currentPage;
             currentPage = pageIndex;
 
@@ -684,6 +477,7 @@
                 p2.style.transform = "translateY(0vh)";
                 p2.classList.add('active-page');
                 p1.classList.remove('active-page');
+                triggerCountUp();
             }
 
             if (goingDown) {
@@ -702,46 +496,51 @@
                 animatedP1.classList.add('active');
             }
 
-            setTimeout(() => {
-                isScrolling = false;
-            }, 2000);
+            setTimeout(() => { isScrolling = false; }, 2000);
+        }
+
+        function triggerCountUp() {
+            if (hasAnimatedViews) return; 
+            hasAnimatedViews = true;
+            const viewCountEl = document.getElementById('view-count');
+            const targetCount = 39483;
+            const animationDuration = 2000;
+            const startTimestamp = performance.now();
+
+            function tick(now) {
+                const elapsed = now - startTimestamp;
+                const progress = Math.min(elapsed / animationDuration, 1);
+                const acceleratedProgress = Math.pow(progress, 2.5);
+                viewCountEl.innerText = Math.floor(acceleratedProgress * targetCount);
+                if (progress < 1) requestAnimationFrame(tick);
+                else viewCountEl.innerText = targetCount;
+            }
+            requestAnimationFrame(tick);
         }
 
         window.addEventListener('wheel', (e) => {
             if (!isUnlocked || isScrolling) return;
-            if (e.deltaY > 15) {
-                goToPage(currentPage + 1);
-            } else if (e.deltaY < -15) {
-                goToPage(currentPage - 1);
-            }
+            if (e.deltaY > 15) goToPage(currentPage + 1);
+            else if (e.deltaY < -15) goToPage(currentPage - 1);
         }, { passive: true });
 
         let touchStartY = 0;
-        window.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
+        window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
         window.addEventListener('touchmove', (e) => {
             if (!isUnlocked || isScrolling) return;
             const touchEndY = e.touches[0].clientY;
             const diffY = touchStartY - touchEndY;
-
-            if (diffY > 40) {
-                goToPage(currentPage + 1);
-            } else if (diffY < -40) {
-                goToPage(currentPage - 1);
-            }
+            if (diffY > 40) goToPage(currentPage + 1);
+            else if (diffY < -40) goToPage(currentPage - 1);
         }, { passive: true });
 
         function dismissOverlay() {
             document.getElementById('entry-overlay').classList.add('fade-out');
             isUnlocked = true; 
-            
             const audio = document.getElementById('audio-element');
             const playIcon = document.getElementById('play-icon');
             const pauseIcon = document.getElementById('pause-icon');
             const musicArt = document.getElementById('music-art');
-            
             audio.play().then(() => {
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
@@ -796,10 +595,7 @@
                 document.getElementById('widget-stats-container').innerHTML = currentData.statsHtml;
                 document.getElementById('widget-platform-tag').innerText = currentData.platform;
                 document.getElementById('widget-action-btn').href = currentData.profileUrl;
-
-                dots.forEach((dot, dIdx) => {
-                    dot.classList.toggle('active', dIdx === index);
-                });
+                dots.forEach((dot, dIdx) => { dot.classList.toggle('active', dIdx === index); });
                 targetElements.forEach(el => el.classList.remove('swipe-hide'));
                 activePlatformIndex = index;
             }, 250);
@@ -807,9 +603,7 @@
 
         function startLoopTimer() {
             clearInterval(rotationInterval);
-            rotationInterval = setInterval(() => {
-                updateWidgetPlatform((activePlatformIndex + 1) % platformData.length);
-            }, 7000);
+            rotationInterval = setInterval(() => { updateWidgetPlatform((activePlatformIndex + 1) % platformData.length); }, 7000);
         }
 
         function manualPlatformSwitch(targetIndex) {
@@ -828,9 +622,7 @@
             const yAxis = (window.innerHeight / 2 - e.pageY) / 35;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
         });
-        document.addEventListener('mouseleave', () => {
-            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
-        });
+        document.addEventListener('mouseleave', () => { card.style.transform = `rotateY(0deg) rotateX(0deg)`; });
 
         const playBtn = document.getElementById('play-btn');
         const playIcon = document.getElementById('play-icon');
@@ -849,10 +641,7 @@
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        audio.addEventListener('loadedmetadata', () => {
-            durationEl.innerText = formatTime(audio.duration);
-        });
-
+        audio.addEventListener('loadedmetadata', () => { durationEl.innerText = formatTime(audio.duration); });
         audio.addEventListener('timeupdate', () => {
             if (audio.duration) {
                 const percentage = (audio.currentTime / audio.duration) * 100;
