@@ -43,7 +43,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(255, 255, 255, 0.08); 
+            background: rgba(255, 255, 255, 0.04); 
             backdrop-filter: blur(14px) brightness(0.6); 
             -webkit-backdrop-filter: blur(14px) brightness(0.6);
             display: flex;
@@ -51,13 +51,42 @@
             align-items: center;
             z-index: 9999;
             cursor: pointer;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            opacity: 1;
+            transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.6s;
         }
         
         #entry-overlay.fade-out {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+        }
+
+        /* ripple that expands from click point */
+        .click-ripple {
+            position: fixed;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background: rgba(255,255,255,0.55);
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            z-index: 10000;
+            animation: rippleExpand 0.55s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+        }
+        @keyframes rippleExpand {
+            0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.7; }
+            60%  { opacity: 0.25; }
+            100% { transform: translate(-50%, -50%) scale(28);  opacity: 0; }
+        }
+
+        /* "click" text: scale up + blur out */
+        @keyframes textExplode {
+            0%   { transform: scale(1);    opacity: 1;  filter: blur(0px); }
+            40%  { transform: scale(1.18); opacity: 0.6; filter: blur(2px); }
+            100% { transform: scale(1.5);  opacity: 0;  filter: blur(12px); }
+        }
+        #entry-text.text-punch {
+            animation: textExplode 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
         }
 
         #entry-text {
@@ -337,6 +366,198 @@
         .control-btn:hover { color: #fff; }
         .play-pause-btn { color: #fff; }
 
+        /* ══════════════════════════════════════
+           ADDED ANIMATIONS
+        ══════════════════════════════════════ */
+
+        /* ── Floating particles canvas (sits behind everything) ── */
+        #particle-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Cursor spotlight: big coloured glow that follows mouse ── */
+        #cursor-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(200,200,200,0.025) 40%, transparent 70%);
+            transition: left 0.06s linear, top 0.06s linear;
+        }
+
+        /* ── Entry overlay: soft pulse ring around "CLICK" ── */
+        #entry-text {
+            position: relative;
+        }
+        #entry-text::after {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255,255,255,0.14);
+            animation: entryRingPulse 2.4s ease-in-out infinite;
+            transition: border-color 0.3s ease;
+        }
+        #entry-overlay:hover #entry-text::after {
+            border-color: rgba(255,255,255,0.32);
+        }
+        @keyframes entryRingPulse {
+            0%, 100% { transform: scale(1);   opacity: 0.35; }
+            50%       { transform: scale(1.08); opacity: 0; }
+        }
+
+        /* ── Gentle idle motion on "CLICK" text (no glitch) ── */
+        #entry-text {
+            animation: textBreathe 2.5s ease-in-out infinite;
+        }
+        @keyframes textBreathe {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-3px); }
+        }
+
+        /* text-punch handled by textExplode in entry-overlay section */
+
+        /* ── Profile card: cursor-following border glow ── */
+        .profile-card {
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            position: relative;
+        }
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            inset: -1.5px;
+            border-radius: 25px;
+            padding: 1.5px;
+            background: radial-gradient(
+                350px circle at var(--card-glow-x, 50%) var(--card-glow-y, 50%),
+                rgba(255,255,255,1) 0%,
+                rgba(255,255,255,0.7) 15%,
+                rgba(255,255,255,0.25) 45%,
+                rgba(255,255,255,0.04) 70%,
+                transparent 100%
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+        .profile-card.card-glow-active::before {
+            opacity: 1;
+        }
+        .profile-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Badge: visible glow pulse ── */
+        .custom-pill-badge {
+            animation: badgePulse 2.5s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); border-color: rgba(255,255,255,0.1); }
+            50%       { box-shadow: 0 0 14px 5px rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.4); }
+        }
+
+        /* ── Profile name: subtle shimmer sweep across text ── */
+        .profile-title {
+            background: linear-gradient(90deg, #fff 20%, rgba(180,180,180,0.85) 50%, #fff 80%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: nameShimmer 3s linear infinite;
+        }
+        @keyframes nameShimmer {
+            0%   { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* ── Widget hover: lift + glow ── */
+        .dynamic-widget {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .dynamic-widget:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255,255,255,0.12);
+        }
+
+        /* ── Music widget: animated waveform bars (visible when playing) ── */
+        .waveform {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .waveform.active { opacity: 1; }
+        .wave-bar {
+            width: 3px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.7);
+            animation: waveBounce 0.8s ease-in-out infinite alternate;
+        }
+        .wave-bar:nth-child(1) { height: 6px;  animation-delay: 0s;    }
+        .wave-bar:nth-child(2) { height: 14px; animation-delay: 0.1s;  }
+        .wave-bar:nth-child(3) { height: 10px; animation-delay: 0.2s;  }
+        .wave-bar:nth-child(4) { height: 18px; animation-delay: 0.05s; }
+        .wave-bar:nth-child(5) { height: 8px;  animation-delay: 0.15s; }
+        @keyframes waveBounce {
+            from { transform: scaleY(0.3); opacity: 0.5; }
+            to   { transform: scaleY(1.0); opacity: 1;   }
+        }
+
+        /* ── Music avatar: glow ring when playing ── */
+        .music-avatar {
+            transition: box-shadow 0.4s ease;
+        }
+        .music-avatar.playing {
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.5), 0 0 25px rgba(200,200,200,0.35) !important;
+        }
+
+        /* ── Progress bar: glowing fill ── */
+        .progress-bar {
+            box-shadow: 0 0 8px 2px rgba(255,255,255,0.45);
+        }
+
+        /* ── View counter: scale pop when count-up finishes ── */
+        @keyframes countFinishPop {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.5); color: rgba(220,220,220,1); }
+            70%  { transform: scale(0.95); }
+            100% { transform: scale(1); color: #fff; }
+        }
+        .view-count-done {
+            display: inline-block;
+            animation: countFinishPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* ── Staggered card children fade-in ── */
+        .card-top,
+        .profile-main,
+        #platform-widget,
+        .widget-dots-nav,
+        .music-widget {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .page-container.scroll-animated.active .card-top        { opacity: 1; transform: none; transition-delay: 0.1s; }
+        .page-container.scroll-animated.active .profile-main    { opacity: 1; transform: none; transition-delay: 0.25s; }
+        .page-container.scroll-animated.active #platform-widget { opacity: 1; transform: none; transition-delay: 0.4s; }
+        .page-container.scroll-animated.active .widget-dots-nav { opacity: 1; transform: none; transition-delay: 0.52s; }
+        .page-container.scroll-animated.active .music-widget    { opacity: 1; transform: none; transition-delay: 0.65s; }
+
         @media (max-width: 520px) {
             .profile-card { padding: 24px 16px; }
             .profile-title { font-size: 36px; }
@@ -351,11 +572,35 @@
             .music-timeline-container { width: 100%; margin: 4px 0; }
             .music-right-controls { justify-content: center; padding-left: 0; gap: 24px; }
         }
+
+        /* ── Corner glows ── */
+        .corner-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, rgba(220,220,220,0.05) 40%, transparent 70%);
+        }
+        #corner-tl { top: -120px; left: -120px; }
+        #corner-tr { top: -120px; right: -120px; }
+        #corner-bl { bottom: -120px; left: -120px; }
+        #corner-br { bottom: -120px; right: -120px; }
+
     </style>
 </head>
 <body>
+    <canvas id="particle-canvas"></canvas>
+    <div id="cursor-glow"></div>
+    <div class="corner-glow" id="corner-tl"></div>
+    <div class="corner-glow" id="corner-tr"></div>
+    <div class="corner-glow" id="corner-bl"></div>
+    <div class="corner-glow" id="corner-br"></div>
 
-    <div id="entry-overlay" onclick="dismissOverlay()">
+    <div id="entry-overlay" onclick="dismissOverlay(event)">
         <div id="entry-text">click</div>
     </div>
 
@@ -420,6 +665,13 @@
                             <div class="music-info">
                                 <h4>leaveamsg - slowed</h4>
                                 <span class="music-artist">morgue</span>
+                            </div>
+                            <div class="waveform" id="waveform">
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
                             </div>
                         </div>
                         
@@ -513,7 +765,10 @@
                 const acceleratedProgress = Math.pow(progress, 2.5);
                 viewCountEl.innerText = Math.floor(acceleratedProgress * targetCount);
                 if (progress < 1) requestAnimationFrame(tick);
-                else viewCountEl.innerText = targetCount;
+                else {
+                    viewCountEl.innerText = targetCount;
+                    viewCountEl.classList.add('view-count-done');
+                }
             }
             requestAnimationFrame(tick);
         }
@@ -534,9 +789,30 @@
             else if (diffY < -40) goToPage(currentPage - 1);
         }, { passive: true });
 
-        function dismissOverlay() {
-            document.getElementById('entry-overlay').classList.add('fade-out');
-            isUnlocked = true; 
+        function dismissOverlay(e) {
+            const overlay = document.getElementById('entry-overlay');
+            const entryText = document.getElementById('entry-text');
+
+            // spawn ripple at exact click spot
+            const ripple = document.createElement('div');
+            ripple.classList.add('click-ripple');
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top  = e.clientY + 'px';
+            document.body.appendChild(ripple);
+
+            // text blows outward
+            entryText.classList.add('text-punch');
+
+            // overlay fades after ripple is well underway
+            setTimeout(() => {
+                overlay.classList.add('fade-out');
+            }, 80);
+
+            setTimeout(() => {
+                ripple.remove();
+                isUnlocked = true;
+            }, 620);
+
             const audio = document.getElementById('audio-element');
             const playIcon = document.getElementById('play-icon');
             const pauseIcon = document.getElementById('pause-icon');
@@ -621,8 +897,26 @@
             const xAxis = (window.innerWidth / 2 - e.pageX) / 35;
             const yAxis = (window.innerHeight / 2 - e.pageY) / 35;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
+
+            // Border glow follows cursor around the card edge
+            const rect = card.getBoundingClientRect();
+            const relX = ((e.clientX - rect.left) / rect.width) * 100;
+            const relY = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.setProperty('--card-glow-x', relX + '%');
+            card.style.setProperty('--card-glow-y', relY + '%');
+
+            const nearCard = e.clientX >= rect.left - 80 && e.clientX <= rect.right + 80 &&
+                             e.clientY >= rect.top - 80  && e.clientY <= rect.bottom + 80;
+            if (nearCard) {
+                card.classList.add('card-glow-active');
+            } else {
+                card.classList.remove('card-glow-active');
+            }
         });
-        document.addEventListener('mouseleave', () => { card.style.transform = `rotateY(0deg) rotateX(0deg)`; });
+        document.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            card.classList.remove('card-glow-active');
+        });
 
         const playBtn = document.getElementById('play-btn');
         const playIcon = document.getElementById('play-icon');
@@ -676,6 +970,89 @@
             musicArt.style.animationPlayState = 'paused';
             audio.currentTime = 0;
         });
+        
+
+        /* ══ Particle system ══ */
+        (function () {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx    = canvas.getContext('2d');
+            let W, H, pts = [];
+            const N = 140;
+
+            function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize);
+            resize();
+
+            function rnd(a, b) { return a + Math.random() * (b - a); }
+
+            function mkPt() {
+                return {
+                    x: rnd(0, W), y: rnd(0, H),
+                    r: rnd(0.6, 2.2),
+                    base: rnd(0.15, 0.85),
+                    vy: rnd(0.12, 0.45),
+                    vx: rnd(-0.2, 0.2),
+                    phase: rnd(0, Math.PI * 2),
+                    ps: rnd(0.008, 0.025),
+                };
+            }
+
+            for (let i = 0; i < N; i++) pts.push(mkPt());
+
+            function loop() {
+                ctx.clearRect(0, 0, W, H);
+                for (const p of pts) {
+                    p.phase += p.ps;
+                    const a = p.base * (0.5 + 0.5 * Math.sin(p.phase));
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${a})`;
+                    ctx.fill();
+                    p.y -= p.vy; p.x += p.vx;
+                    if (p.y < -5) { p.y = H + 5; p.x = rnd(0, W); }
+                }
+                requestAnimationFrame(loop);
+            }
+            loop();
+        })();
+
+        /* ══ Music waveform + avatar ring ══ */
+        const waveform  = document.getElementById('waveform');
+        const musicArtEl = document.getElementById('music-art');
+        audio.addEventListener('play',  () => { waveform.classList.add('active');    musicArtEl.classList.add('playing'); });
+        audio.addEventListener('pause', () => { waveform.classList.remove('active'); musicArtEl.classList.remove('playing'); });
+        audio.addEventListener('ended', () => { waveform.classList.remove('active'); musicArtEl.classList.remove('playing'); });
+
+        /* ══ Corner glows based on cursor proximity ══ */
+        (function() {
+            const corners = [
+                { el: document.getElementById('corner-tl'), x: 0,                  y: 0 },
+                { el: document.getElementById('corner-tr'), x: window.innerWidth,   y: 0 },
+                { el: document.getElementById('corner-bl'), x: 0,                  y: window.innerHeight },
+                { el: document.getElementById('corner-br'), x: window.innerWidth,   y: window.innerHeight }
+            ];
+
+            window.addEventListener('resize', () => {
+                corners[1].x = window.innerWidth;
+                corners[2].y = window.innerHeight;
+                corners[3].x = window.innerWidth;
+                corners[3].y = window.innerHeight;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                const mx = e.clientX, my = e.clientY;
+                const maxDist = Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) * 0.45;
+                corners.forEach(c => {
+                    const dist = Math.sqrt((mx - c.x) ** 2 + (my - c.y) ** 2);
+                    const strength = Math.max(0, 1 - dist / maxDist);
+                    c.el.style.opacity = (strength * 0.9).toFixed(3);
+                });
+            });
+
+            document.addEventListener('mouseleave', () => {
+                corners.forEach(c => { c.el.style.opacity = '0'; });
+            });
+        })();
+
     </script>
-</body>
 </html>
